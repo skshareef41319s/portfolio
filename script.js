@@ -83,6 +83,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 
 // Enhanced form submission with EmailJS integration
 const contactForm = document.getElementById('contactForm');
+
 if (contactForm) {
     contactForm.addEventListener('submit', function(e) {
         e.preventDefault();
@@ -116,12 +117,13 @@ if (contactForm) {
         // EmailJS integration
         if (typeof emailjs !== 'undefined') {
             emailjs.sendForm("service_0xhfczp", "template_r9g0egr", this)
-                .then(function () {
-                    showNotification('Thank you for your message! I\'ll get back to you soon.', 'success');
+                .then(() => {
+                    showNotification("✅ Thank you for your message! I'll get back to you soon.", "success");
                     contactForm.reset();
-                }, function (error) {
-                    showNotification('Oops! Something went wrong. Please try again.', 'error');
-                    console.log("EmailJS Error:", error);
+                })
+                .catch(error => {
+                    showNotification("❌ Oops! Something went wrong. Please try again.", "error");
+                    console.error("EmailJS Error:", error);
                 })
                 .finally(() => {
                     submitBtn.innerHTML = originalText;
@@ -131,8 +133,8 @@ if (contactForm) {
         } else {
             // Fallback without EmailJS
             setTimeout(() => {
-                showNotification('Thank you for your message! I\'ll get back to you soon.', 'success');
-                this.reset();
+                showNotification("✅ Thank you for your message! I'll get back to you soon.", "success");
+                contactForm.reset();
                 submitBtn.innerHTML = originalText;
                 submitBtn.disabled = false;
                 submitBtn.style.opacity = '1';
@@ -140,6 +142,7 @@ if (contactForm) {
         }
     });
 }
+
 
 // Enhanced notification system with better mobile support
 function showNotification(message, type = 'info') {
@@ -598,3 +601,4 @@ if ('serviceWorker' in navigator && window.location.protocol === 'https:') {
             });
     });
 }
+
